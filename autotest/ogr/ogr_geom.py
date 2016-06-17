@@ -36,7 +36,6 @@ sys.path.append( '../pymod' )
 
 import gdaltest
 import ogrtest
-from base64 import b64decode
 from osgeo import ogr
 from osgeo import osr
 from osgeo import gdal
