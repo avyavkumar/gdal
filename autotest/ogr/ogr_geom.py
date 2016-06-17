@@ -158,7 +158,7 @@ def ogr_geom_wkb_triangle():
     wkt_string = 'TRIANGLE ((1179091.16469033 712782.883845978 0,1161053.02182265 667456.268434881 0,1214704.9339419 641092.828859039 0,1179091.16469033 712782.883845978 0))'
     wkt_string_geom = geom_2.ExportToWkt()
     if (wkt_string != wkt_string_geom):
-        gdaltest.post_reason( 'Area() result wrong, got %g.' % area )
+        gdaltest.post_reason( 'WKB of triangle got wrong result')
         return 'fail'
 
     return 'success'
