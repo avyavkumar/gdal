@@ -1,0 +1,37 @@
+<GMLFeatureClassList>
+  <GMLFeatureClass>
+    <Name>planet_osm_point</Name>
+    <ElementPath>planet_osm_point</ElementPath>
+    <!--POINT-->
+    <GeometryType>1</GeometryType>
+    <DatasetSpecificInfo>
+      <FeatureCount>1</FeatureCount>
+      <ExtentXMin>-17580408.88225</ExtentXMin>
+      <ExtentXMax>-17580408.88225</ExtentXMax>
+      <ExtentYMin>2418673.45862</ExtentYMin>
+      <ExtentYMax>2418673.45862</ExtentYMax>
+    </DatasetSpecificInfo>
+    <PropertyDefn>
+      <Name>name</Name>
+      <ElementPath>name</ElementPath>
+      <Type>String</Type>
+      <Width>9</Width>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>osm_id</Name>
+      <ElementPath>osm_id</ElementPath>
+      <Type>Integer</Type>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>pid</Name>
+      <ElementPath>pid</ElementPath>
+      <Type>Integer</Type>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>place</Name>
+      <ElementPath>place</ElementPath>
+      <Type>String</Type>
+      <Width>6</Width>
+    </PropertyDefn>
+  </GMLFeatureClass>
+</GMLFeatureClassList>

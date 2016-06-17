@@ -36,6 +36,7 @@ sys.path.append( '../pymod' )
 
 import gdaltest
 import ogrtest
+from base64 import b64decode
 from osgeo import ogr
 from osgeo import osr
 from osgeo import gdal
@@ -140,6 +141,27 @@ def ogr_geom_area_triangle():
 
     return 'success'
 
+###############################################################################
+# WKB method test for Triangle
+
+def ogr_geom_wkb_triangle():
+
+    ring = ogr.Geometry(ogr.wkbLinearRing)
+    ring.AddPoint(1179091.1646903288, 712782.8838459781)
+    ring.AddPoint(1161053.0218226474, 667456.2684348812)
+    ring.AddPoint(1214704.933941905, 641092.8288590391)
+    ring.AddPoint(1179091.1646903288, 712782.8838459781)
+    geom = ogr.Geometry(ogr.wkbTriangle)
+    geom.AddGeometry(ring)
+    string = geom.ExportToWkb(ogr.wkbXDR)
+    geom_2 = ogr.CreateGeometryFromWkb(string)
+    wkt_string = 'TRIANGLE ((1179091.16469033 712782.883845978 0,1161053.02182265 667456.268434881 0,1214704.9339419 641092.828859039 0,1179091.16469033 712782.883845978 0))'
+    wkt_string_geom = geom_2.ExportToWkt()
+    if (wkt_string != wkt_string_geom):
+        gdaltest.post_reason( 'Area() result wrong, got %g.' % area )
+        return 'fail'
+
+    return 'success'
 
 def ogr_geom_is_empty():
 
@@ -3699,6 +3721,7 @@ gdaltest_list = [
     ogr_geom_area_empty_linearring,
     ogr_geom_transform_to,
     ogr_geom_transform,
+    ogr_geom_wkb_triangle,
     ogr_geom_closerings,
     ogr_geom_segmentize,
     ogr_geom_value,
