@@ -1096,7 +1096,7 @@ class CPL_DLL OGRTriangle : public OGRPolygon
     virtual OGRErr addRing	(OGRCurve *poNewRing);
     virtual OGRGeometry *SymDifference( const OGRGeometry *poOtherGeom) const CPL_WARN_UNUSED_RESULT;
 
-    OGRGeometry* CastToPolygon();
+    OGRPolygon* CastToPolygon();
 };
 
 /************************************************************************/
@@ -1323,9 +1323,6 @@ class CPL_DLL OGRPolyhedralSurface : public OGRSurface
 
 class CPL_DLL OGRTriangulatedSurface : public OGRPolyhedralSurface
 {
-  protected:
-    virtual OGRErr addGeometryDirectly(OGRGeometry *poNewGeom);
-
   public:
     OGRTriangulatedSurface();
     OGRTriangulatedSurface(const OGRTriangulatedSurface &other);
@@ -1344,6 +1341,7 @@ class CPL_DLL OGRTriangulatedSurface : public OGRPolyhedralSurface
 
     virtual OGRGeometry *clone() const;
     virtual OGRErr addGeometry( const OGRGeometry * );
+    virtual OGRErr addGeometryDirectly(OGRGeometry *poNewGeom);
     OGRMultiPolygon* CastToMultiPolygon();
 };
 
