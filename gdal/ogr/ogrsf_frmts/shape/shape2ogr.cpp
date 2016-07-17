@@ -332,12 +332,11 @@ OGRGeometry *SHPReadOGRObject( SHPHandle hSHP, int iShape, SHPObject *psShape )
 /* -------------------------------------------------------------------- */
     else if( psShape->nSHPType == SHPT_MULTIPATCH )
     {
-        OGRGeometryCollection *poGC = new OGRGeometryCollection();
-        OGRMultiPolygon *poMP = new OGRMultiPolygon();
+        OGRMultiSurface *poMS = new OGRMultiSurface();
+        OGRPolygon *poPoly = new OGRPolygon();
         OGRTriangulatedSurface *poTINStrip = new OGRTriangulatedSurface();
         OGRTriangulatedSurface *poTINFan = new OGRTriangulatedSurface();
         int iPart;
-        OGRPolygon *poLastPoly = NULL;
 
         for( iPart = 0; iPart < psShape->nParts; iPart++ )
         {
@@ -366,12 +365,6 @@ OGRGeometry *SHPReadOGRObject( SHPHandle hSHP, int iShape, SHPObject *psShape )
             {
                 int iBaseVert;
 
-                if( poLastPoly != NULL )
-                {
-                    poMP->addGeometryDirectly( poLastPoly );
-                    poLastPoly = NULL;
-                }
-
                 for( iBaseVert = 0; iBaseVert < nPartPoints-2; iBaseVert++ )
                 {
                     int iSrcVert = iBaseVert + nPartStart;
@@ -398,12 +391,6 @@ OGRGeometry *SHPReadOGRObject( SHPHandle hSHP, int iShape, SHPObject *psShape )
             else if( psShape->panPartType[iPart] == SHPP_TRIFAN )
             {
                 int iBaseVert;
-
-                if( poLastPoly != NULL )
-                {
-                    poMP->addGeometryDirectly( poLastPoly );
-                    poLastPoly = NULL;
-                }
 
                 for( iBaseVert = 0; iBaseVert < nPartPoints-2; iBaseVert++ )
                 {
@@ -433,47 +420,31 @@ OGRGeometry *SHPReadOGRObject( SHPHandle hSHP, int iShape, SHPObject *psShape )
                      || psShape->panPartType[iPart] == SHPP_FIRSTRING
                      || psShape->panPartType[iPart] == SHPP_RING )
             {
-                if( poLastPoly != NULL
-                    && (psShape->panPartType[iPart] == SHPP_OUTERRING
-                        || psShape->panPartType[iPart] == SHPP_FIRSTRING) )
-                {
-                    poMP->addGeometryDirectly( poLastPoly );
-                    poLastPoly = NULL;
-                }
-
-                if( poLastPoly == NULL )
-                    poLastPoly = new OGRPolygon();
-
-                poLastPoly->addRingDirectly(
+                poPoly->addRingDirectly(
                     CreateLinearRing( psShape, iPart, TRUE, TRUE ) );
             }
+
             else
                 CPLDebug( "OGR", "Unrecognized parttype %d, ignored.",
                           psShape->panPartType[iPart] );
         }
 
-        if( poLastPoly != NULL )
-        {
-            poMP->addGeometryDirectly( poLastPoly );
-            poLastPoly = NULL;
-        }
-
         if (!poTINStrip->IsEmpty())
-            poGC->addGeometryDirectly(poTINStrip);
+            poMS->addGeometryDirectly(poTINStrip);
         else
             delete poTINStrip;
 
         if (!poTINFan->IsEmpty())
-            poGC->addGeometryDirectly(poTINFan);
+            poMS->addGeometryDirectly(poTINFan);
         else
             delete poTINFan;
 
-        if(!poMP->IsEmpty())
-            poGC->addGeometryDirectly(poMP);
+        if(!poPoly->IsEmpty())
+            poMS->addGeometryDirectly(poPoly);
         else
-            delete poMP;
+            delete poPoly;
 
-        poOGR = poGC;
+        poOGR = poMS;
 
     }
 
