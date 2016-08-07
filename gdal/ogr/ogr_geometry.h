@@ -1239,6 +1239,9 @@ class CPL_DLL OGRMultiPolygon : public OGRMultiSurface
     friend class OGRPolyhedralSurface;
     friend class OGRTriangulatedSurface;
 
+  private:
+            OGRErr _addGeometry(const OGRGeometry * poNewGeom );
+            OGRErr _addGeometryDirectly( OGRGeometry * poNewGeom );
   public:
             OGRMultiPolygon();
             OGRMultiPolygon(const OGRMultiPolygon& other);
